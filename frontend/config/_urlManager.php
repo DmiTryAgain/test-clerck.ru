@@ -6,8 +6,8 @@ return [
     'enableStrictParsing' => true,
     'baseUrl' => getenv('FRONTEND_HOST_URL'),
     'rules' => [
-//        ['pattern' => '/', 'route' => 'site/index'],
-//        ['pattern' => '/<action>', 'route' => 'site/<action>'],
-        ['class' => 'yii\rest\UrlRule', 'controller' => 'user', 'pluralize' => false],
+        ['class' => 'yii\rest\UrlRule', 'controller' => 'peoples', 'pluralize' => false],
+        ['pattern' => '/', 'route' => 'site/index'],
+        ['pattern' => '/<action>', 'route' => 'site/<action>'],
     ],
 ];

@@ -1,0 +1,2 @@
+[26-Aug-2021 16:17:45 Europe/Moscow] PHP Warning:  session_start(): open(/var/www/sessions/sess_e64c2ba27a4fdae3d494443332ed8179, O_RDWR) failed: Permission denied (13) in /var/www/html/vendor/yiisoft/yii2/web/Session.php on line 152
+[26-Aug-2021 16:17:45 Europe/Moscow] PHP Warning:  session_start(): Failed to read session data: files (path: /var/www/sessions) in /var/www/html/vendor/yiisoft/yii2/web/Session.php on line 152

@@ -34,6 +34,13 @@ class PeoplesController extends ActiveController
         );
     }
 
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['index']);
+        return $actions;
+    }
+
     /**
      * Lists all Peoples models.
      * @return mixed
@@ -41,22 +48,23 @@ class PeoplesController extends ActiveController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Peoples::find(),
-            /*
+            'query' => Peoples::find()->joinWith('phoneNumbers'),
+
             'pagination' => [
-                'pageSize' => 50
+                'pageSize' => 10
             ],
             'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
+                'attributes' => [
+                    'fullName' => [
+                        'asc' => ['fullName' => SORT_ASC],
+                        'desc' => ['fullName' => SORT_DESC],
+                        'default' => SORT_ASC
+                    ],
+                ],
             ],
-            */
-        ]);
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
         ]);
+        return $dataProvider;
     }
 
     /**

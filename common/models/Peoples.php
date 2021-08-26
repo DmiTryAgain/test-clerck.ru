@@ -14,6 +14,7 @@ use Yii;
  * @property string|null $description Описание контакта
  * @property string|null $created_at Дата создания
  * @property string|null $updated_at Дата обновления
+ * @property string|null $fullName Полное имя
  *
  * @property PhoneNumber[] $phoneNumbers
  */
@@ -35,6 +36,7 @@ class Peoples extends \yii\db\ActiveRecord
         return [
             [['created_at', 'updated_at'], 'safe'],
             [['last_name', 'first_name', 'middle_name', 'description'], 'string', 'max' => 255],
+            ['fullName', 'safe'],
         ];
     }
 
@@ -54,6 +56,19 @@ class Peoples extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        return [
+            'id',
+            'fullName' => function () {
+                return $this->last_name . ' ' . $this->first_name . ' ' . $this->middle_name;
+            },
+            'description',
+            'created_at',
+            'updated_at',
+        ];
+    }
+
     /**
      * Gets query for [[PhoneNumbers]].
      *
@@ -62,5 +77,10 @@ class Peoples extends \yii\db\ActiveRecord
     public function getPhoneNumbers()
     {
         return $this->hasMany(PhoneNumber::class, ['people_id' => 'id']);
+    }
+
+    public function getFullName()
+    {
+        return $this->last_name . ' ' . $this->first_name . ' ' . $this->middle_name;
     }
 }

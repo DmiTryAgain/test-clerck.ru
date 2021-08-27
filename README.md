@@ -5,7 +5,7 @@
     <br>
 </p>
 
-Выполнение тестового задания для компании Клерк.Ру
+<h1>Выполнение тестового задания для компании Клерк.Ру</h1>
 Постановка задачи: https://docs.google.com/document/d/1TQ4Mbsc3Uk_Fpem0kjirUPv64EHnZun73N36oOj2Bng/edit#heading=h.eytg4j70c563
 
 Для запуска проекта нужно иметь установленный Docker на своей машине, либо установленные приложения nginx, php, mysql.
@@ -36,6 +36,18 @@ Linux:
 <li>php yii migrate</li>
 </ul>
 
+
+<h1>Первое задание</h1>
+<p>Выполнить в корне проекта:</p>
+<p>cd docker</p>
+<p>docker exec -it test_clerck_php sh</p>
+<p>Или находясь в контейнере выполнить:</p>
+<p>sh</p>
+<p>Затем наслаждайтесь игрой :)</p>
+<p>php yii game "!!???!????" "??!!?!!!!!!!"</p>
+<p>Аргументы передавать нужно в кавычках, иначе оболочка некорректно их обрабатывает</p>
+
+<h1>Второе задание</h1>
 API реализовано в контроллерах:
 frontend/controllers/PeoplesController.php
 frontend/controllers/PhoneNumbersController.php

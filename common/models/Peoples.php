@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use DateTime;
 use Yii;
 
 /**
@@ -18,12 +19,17 @@ use Yii;
  *
  * @property PhoneNumber[] $phoneNumbers
  */
-class Peoples extends \yii\db\ActiveRecord
+class Peoples extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
+    {
+        return 'peoples';
+    }
+
+    public static function relationName(): string
     {
         return 'peoples';
     }
@@ -35,8 +41,8 @@ class Peoples extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'updated_at'], 'safe'],
+            [['last_name', 'first_name'], 'required'],
             [['last_name', 'first_name', 'middle_name', 'description'], 'string', 'max' => 255],
-            ['fullName', 'safe'],
         ];
     }
 
@@ -56,17 +62,34 @@ class Peoples extends \yii\db\ActiveRecord
         ];
     }
 
+    public function updateAttributes($attributes)
+    {
+        return [
+            'last_name',
+            'first_name',
+            'middle_name',
+            'description',
+        ];
+    }
+
     public function fields()
     {
         return [
             'id',
-            'fullName' => function () {
-                return $this->last_name . ' ' . $this->first_name . ' ' . $this->middle_name;
-            },
+            'last_name',
+            'first_name',
+            'middle_name',
             'description',
             'created_at',
             'updated_at',
+            'phoneNumbers'
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        $this->updated_at = (new DateTime())->format('Y-m-d H:i:s');
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -77,10 +100,5 @@ class Peoples extends \yii\db\ActiveRecord
     public function getPhoneNumbers()
     {
         return $this->hasMany(PhoneNumber::class, ['people_id' => 'id']);
-    }
-
-    public function getFullName()
-    {
-        return $this->last_name . ' ' . $this->first_name . ' ' . $this->middle_name;
     }
 }

@@ -52,8 +52,8 @@ class m210823_201922_create_table_peoples extends Migration
             'first_name' => $this->string()->notNull()->defaultValue('Не задано')->comment('Имя'),
             'middle_name' => $this->string()->defaultValue('Не задано')->comment('Отчество'),
             'description' => $this->string()->comment('Описание контакта'),
-            'created_at' => $this->dateTime()->defaultValue((new DateTime())->format('Y-m-d'))->comment('Дата создания'),
-            'updated_at' => $this->dateTime()->defaultValue((new DateTime())->format('Y-m-d'))->comment('Дата обновления'),
+            'created_at' => $this->dateTime()->comment('Дата создания'),
+            'updated_at' => $this->dateTime()->comment('Дата обновления'),
         ]);
 
         foreach ($this->data as $item)
@@ -62,6 +62,8 @@ class m210823_201922_create_table_peoples extends Migration
                 'last_name' => $item['lastName'],
                 'first_name' => $item['firstName'],
                 'middle_name' => $item['middleName'],
+                'created_at' => (new DateTime())->format('Y-m-d H:i:s'),
+                'updated_at' => '',
             ]);
         }
     }

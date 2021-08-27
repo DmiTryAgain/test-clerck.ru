@@ -17,7 +17,7 @@ use Yii;
  *
  * @property Peoples $people
  */
-class PhoneNumber extends \yii\db\ActiveRecord
+class PhoneNumber extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -25,6 +25,11 @@ class PhoneNumber extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'phone_numbers';
+    }
+
+    public static function relationName(): string
+    {
+        return 'phoneNumbers';
     }
 
     /**
@@ -36,6 +41,7 @@ class PhoneNumber extends \yii\db\ActiveRecord
             [['category', 'people_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['number', 'description'], 'string', 'max' => 255],
+            [['number'], 'getFormatPhone'],
             [['people_id'], 'exist', 'skipOnError' => true, 'targetClass' => Peoples::class, 'targetAttribute' => ['people_id' => 'id']],
         ];
     }
@@ -56,13 +62,41 @@ class PhoneNumber extends \yii\db\ActiveRecord
         ];
     }
 
+    public function updateAttributes($attributes)
+    {
+        return [
+            'number',
+            'category',
+            'description',
+            'people_id',
+        ];
+    }
+
     /**
      * Gets query for [[People]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getPeople()
+    public function getPeoples()
     {
         return $this->hasOne(Peoples::class, ['id' => 'people_id']);
+    }
+
+    public function getFormatPhone($attribute) {
+        $phone = $this->{$attribute};
+        preg_match(
+            '/\+?(\d{1,4})\s*\(?(\d{3,5})\)?\s*(\d{3})[\s-]?(\d{2})[\s-]?(\d{2})/',
+            $phone,
+            $matches
+        );
+        if (count($matches) !== 6) {
+            $this->addError($attribute, 'Некорректный формат телефона');
+            return;
+        }
+        array_shift($matches);
+
+        $phone = sprintf('+%s(%s)%s-%s-%s', ...$matches);
+
+        $this->{$attribute} = $phone;
     }
 }

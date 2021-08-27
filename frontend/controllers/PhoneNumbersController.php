@@ -4,7 +4,6 @@ namespace frontend\controllers;
 
 use common\models\Peoples;
 use common\models\PhoneNumber;
-use frontend\actions\UpdateAction;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 use yii\rest\IndexAction;
@@ -12,9 +11,20 @@ use yii\rest\IndexAction;
 /**
  * PeoplesController implements the CRUD actions for Peoples model.
  */
-class PeoplesController extends ActiveController
+class PhoneNumbersController extends ActiveController
 {
-    public $modelClass = Peoples::class;
+
+    public $modelClass = PhoneNumber::class;
+
+    /**
+     * @inheritDoc
+     */
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors()
+        );
+    }
 
     public function actions()
     {
@@ -25,20 +35,22 @@ class PeoplesController extends ActiveController
             'checkAccess' => [$this, 'checkAccess'],
             'prepareDataProvider' => function(IndexAction $action, $filter) {
                 return new ActiveDataProvider([
-                    'query' => Peoples::find()->groupBy(Peoples::tableName() . '.id')->joinWith(PhoneNumber::relationName()),
+                    'query' => PhoneNumber::find()->joinWith(Peoples::relationName()),
                     'pagination' => [
                         'pageSize' => 10
+                    ],
+                    'sort' => [
+                        'attributes' => [
+                            'number' => [
+                                'asc' => ['number' => SORT_ASC],
+                                'desc' => ['number' => SORT_DESC],
+                                'default' => SORT_ASC
+                            ],
+                        ],
                     ],
                 ]);
             },
         ];
-        $actions['update'] = [
-            'class' => UpdateAction::class,
-            'modelClass' => $this->modelClass,
-            'checkAccess' => [$this, 'checkAccess'],
-            'scenario' => $this->updateScenario,
-        ];
-
         return $actions;
     }
 }
